@@ -37,6 +37,12 @@ jobs:
     - name: Generate JavaDocs
       run: mvn javadoc:javadoc
 
+    # Install .NET 6.0 SDK for OWASP Dependency-Check
+    - name: Setup .NET 6.0
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '6.0.x'
+
     # Security scan with OWASP Dependency-Check
     - name: OWASP Dependency-Check
       run: mvn org.owasp:dependency-check-maven:check
