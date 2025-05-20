@@ -42,7 +42,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}    # Generate a token on SonarCloud.io
-      run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=container-manager-lib
+      run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=RandomCodeSpace_container-manager-lib
 
     # Security scan with OWASP Dependency-Check
     - name: OWASP Dependency-Check
