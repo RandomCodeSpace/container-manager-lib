@@ -1,0 +1,7 @@
+com.unifiedcontainermanager.Core
+com.unifiedcontainermanager.Detection
+com.unifiedcontainermanager.DTOs
+com.unifiedcontainermanager.Enums
+com.unifiedcontainermanager.Exceptions
+com.unifiedcontainermanager.Strategy
+com.unifiedcontainermanager.Utils
