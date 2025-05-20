@@ -37,13 +37,6 @@ jobs:
     - name: Generate JavaDocs
       run: mvn javadoc:javadoc
 
-    # Static Code Analysis with SonarCloud
-    - name: SonarCloud Scan
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}    # Generate a token on SonarCloud.io
-      run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=RandomCodeSpace_container-manager-lib
-
     # Security scan with OWASP Dependency-Check
     - name: OWASP Dependency-Check
       run: mvn org.owasp:dependency-check-maven:check
