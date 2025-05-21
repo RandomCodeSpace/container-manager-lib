@@ -62,6 +62,27 @@ https://[your-github-username].github.io/container-manager-lib/
 
 Replace `[your-github-username]` with your actual GitHub username or organization name.
 
+### Releasing to Maven Central
+
+This project includes a GitHub Actions workflow that automatically deploys the library to Maven Central when a new GitHub release is created.
+
+To release a new version:
+
+1. Update the version in `pom.xml`
+2. Create a new release in GitHub with an appropriate tag (e.g., v0.1.0)
+3. The GitHub Actions workflow will automatically build and deploy the library to Maven Central
+
+#### Required GitHub Secrets
+
+The following secrets must be configured in your GitHub repository settings:
+
+- `OSS_NEXUS_USER`: Your Sonatype OSSRH username
+- `OSS_NEXUS_PASS`: Your Sonatype OSSRH password
+- `GPG_PRIVATE_KEY`: Your GPG private key for signing artifacts
+- `GPG_PASSPHRASE`: The passphrase for your GPG key
+
+These secrets are used by the GitHub Actions workflow to authenticate with Maven Central and sign the artifacts.
+
 ## Usage
 
 Add the JAR to your project's dependencies and use the container management API as shown in the examples below:
@@ -69,15 +90,13 @@ Add the JAR to your project's dependencies and use the container management API 
 ### Basic Usage
 
 ```java
-import com.unifiedcontainermanager.Strategy.ContainerService;
-import com.unifiedcontainermanager.Core.ContainerManager;
-import com.unifiedcontainermanager.Core.ImageManager;
-import com.unifiedcontainermanager.Enums.ToolType;
-import com.unifiedcontainermanager.DTOs.ContainerConfig;
-import com.unifiedcontainermanager.DTOs.ImageBuildConfig;
-import com.unifiedcontainermanager.DTOs.ContainerInfo;
-import com.unifiedcontainermanager.DTOs.ImageInfo;
-import com.unifiedcontainermanager.Exceptions.ContainerManagerException;
+import Strategy.io.github.randomcodespace.ContainerService;
+import Enums.io.github.randomcodespace.ToolType;
+import DTOs.io.github.randomcodespace.ContainerConfig;
+import DTOs.io.github.randomcodespace.ImageBuildConfig;
+import DTOs.io.github.randomcodespace.ContainerInfo;
+import DTOs.io.github.randomcodespace.ImageInfo;
+import Exceptions.io.github.randomcodespace.ContainerManagerException;
 
 import java.util.Arrays;
 import java.util.List;
@@ -87,7 +106,7 @@ public class ContainerExample {
     public static void main(String[] args) {
         // Create a ContainerService with preferred tool order
         ContainerService service = new ContainerService(
-            Arrays.asList(ToolType.DOCKER, ToolType.PODMAN, ToolType.BUILDAH)
+                Arrays.asList(ToolType.DOCKER, ToolType.PODMAN, ToolType.BUILDAH)
         );
 
         try {
@@ -96,7 +115,7 @@ public class ContainerExample {
 
             // Get information about the active tool
             service.getActiveToolType().ifPresent(
-                toolType -> System.out.println("Using: " + toolType)
+                    toolType -> System.out.println("Using: " + toolType)
             );
 
             // Use the service for container and image operations
@@ -117,11 +136,11 @@ public class ContainerExample {
     private static void runContainerExample(ContainerService service) throws ContainerManagerException {
         // Create a container configuration
         ContainerConfig config = new ContainerConfig.ContainerConfigBuilder()
-            .imageName("nginx")
-            .tag("latest")
-            .name("web-server")
-            .portBindings(Arrays.asList("8080:80"))
-            .build();
+                .imageName("nginx")
+                .tag("latest")
+                .name("web-server")
+                .portBindings(Arrays.asList("8080:80"))
+                .build();
 
         // Create and start a container
         String containerId = service.createContainer(config).join();
@@ -132,8 +151,8 @@ public class ContainerExample {
 
         // List running containers
         List<ContainerInfo> containers = service.listContainers(false).join();
-        containers.forEach(container -> 
-            System.out.println("Running container: " + container.getId() + " - " + container.getName())
+        containers.forEach(container ->
+                System.out.println("Running container: " + container.getId() + " - " + container.getName())
         );
 
         // Stop and remove the container
@@ -144,26 +163,26 @@ public class ContainerExample {
 
     private static void buildImageExample(ContainerService service) throws ContainerManagerException {
         // Pull an image
-        CompletableFuture<Void> pullFuture = service.pullImage("alpine", "latest", 
-            progress -> System.out.println("Pull progress: " + progress)
+        CompletableFuture<Void> pullFuture = service.pullImage("alpine", "latest",
+                progress -> System.out.println("Pull progress: " + progress)
         );
         pullFuture.join();
 
         // Build a custom image
         ImageBuildConfig buildConfig = new ImageBuildConfig.ImageBuildConfigBuilder()
-            .dockerfilePath("./Dockerfile")
-            .tag("my-custom-image:latest")
-            .build();
+                .dockerfilePath("./Dockerfile")
+                .tag("my-custom-image:latest")
+                .build();
 
-        String imageId = service.buildImage(buildConfig, 
-            output -> System.out.println("Build output: " + output)
+        String imageId = service.buildImage(buildConfig,
+                output -> System.out.println("Build output: " + output)
         ).join();
         System.out.println("Built image: " + imageId);
 
         // List available images
         List<ImageInfo> images = service.listImages().join();
-        images.forEach(image -> 
-            System.out.println("Image: " + image.getId() + " - " + image.getName())
+        images.forEach(image ->
+                System.out.println("Image: " + image.getId() + " - " + image.getName())
         );
     }
 }
