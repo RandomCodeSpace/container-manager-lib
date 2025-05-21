@@ -1,7 +1,7 @@
-com.unifiedcontainermanager.Core
-com.unifiedcontainermanager.Detection
-com.unifiedcontainermanager.DTOs
-com.unifiedcontainermanager.Enums
-com.unifiedcontainermanager.Exceptions
-com.unifiedcontainermanager.Strategy
-com.unifiedcontainermanager.Utils
+io.github.randomcodespace.container.core
+io.github.randomcodespace.container.detection
+io.github.randomcodespace.container.dto
+io.github.randomcodespace.container.enums
+io.github.randomcodespace.container.exceptions
+io.github.randomcodespace.container.strategy
+io.github.randomcodespace.container.utils
